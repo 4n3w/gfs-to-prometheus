@@ -1,0 +1,52 @@
+# Example configuration for GFS to Prometheus converter
+
+# Metric name prefix (default: gemfire)
+metric_prefix: gemfire
+
+# Filter which resources and stats to include/exclude
+filters:
+  # Only process these resource types (empty = all)
+  include_resource_types:
+    - CachePerfStats
+    - PartitionedRegionStats
+    - DiskStoreStats
+    - GatewayReceiverStats
+    - GatewaySenderStats
+    
+  # Skip these resource types
+  exclude_resource_types:
+    - InternalDistributedSystemStats
+    
+  # Only include these specific stats (empty = all)
+  include_stats: []
+  
+  # Skip these stats
+  exclude_stats:
+    - internalUseOnly
+
+# Custom metric name mappings
+metric_mappings:
+  # Map specific GFS stats to custom Prometheus metric names
+  "CachePerfStats.puts":
+    name: cache_operations_total
+    labels:
+      operation: put
+      
+  "CachePerfStats.gets":
+    name: cache_operations_total
+    labels:
+      operation: get
+      
+  "CachePerfStats.destroys":
+    name: cache_operations_total
+    labels:
+      operation: destroy
+      
+  # Drop specific metrics
+  "CachePerfStats.debugMetric":
+    drop: true
+
+# Additional labels to add to all metrics
+label_mappings:
+  environment: production
+  cluster: main
