@@ -41,14 +41,14 @@ func (c *Converter) Close() error {
 }
 
 func (c *Converter) ConvertFile(filename string) error {
-	parser, err := gfs.NewParser(filename)
+	parser, err := gfs.NewGeodeParser(filename)
 	if err != nil {
 		return fmt.Errorf("failed to create parser: %w", err)
 	}
 	defer parser.Close()
 
 	log.Printf("Parsing GFS file: %s", filename)
-	if err := parser.Parse(); err != nil {
+	if err := parser.ParseGeode(); err != nil {
 		return fmt.Errorf("failed to parse file: %w", err)
 	}
 

@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	GFSMagicNumber = 0x47465301 // "GFS\x01"
+	GFSMagicNumber = 0x044d // Actual GemFire stats file magic number
 	HeaderSize     = 256
 )
 
@@ -86,19 +86,23 @@ func (p *Parser) Close() error {
 }
 
 func (p *Parser) readHeader() error {
-	var magic uint32
-	if err := binary.Read(p.reader, p.byteOrder, &magic); err != nil {
+	// Read first two bytes for magic number
+	magicBytes := make([]byte, 2)
+	if _, err := io.ReadFull(p.reader, magicBytes); err != nil {
 		return err
 	}
 
+	// Check magic number (0x4d 0x04 in file = 0x044d in big endian)
+	magic := binary.BigEndian.Uint16(magicBytes)
 	if magic != GFSMagicNumber {
-		p.byteOrder = binary.BigEndian
-		if magic != GFSMagicNumber {
-			return fmt.Errorf("invalid GFS magic number: %x", magic)
-		}
+		return fmt.Errorf("invalid GFS magic number: %x", magic)
 	}
 
-	header := make([]byte, HeaderSize-4)
+	// The format appears to be big endian based on the magic number
+	p.byteOrder = binary.BigEndian
+
+	// Skip the rest of the header for now - we'll parse it properly later
+	header := make([]byte, 100)
 	if _, err := io.ReadFull(p.reader, header); err != nil {
 		return err
 	}
