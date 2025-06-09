@@ -1,1 +1,60 @@
+# Build artifacts
 gfs-to-prometheus
+
+# Prometheus data directories
+data/
+chunks_head/
+wal/
+wbl/
+*.active
+
+# Test and debug files
+test_*.go
+debug_*.go
+analyze_*.go
+check_*.go
+find_*.go
+fix_*.go
+trace_*.go
+validate_*.go
+verify_*.go
+isolate_*.go
+extract_*.go
+decode_*.go
+diagnose_*.go
+brute_force_*.go
+final_*.go
+
+# Test data directories
+test_data*/
+data_*/
+output*/
+
+# Temporary files
+temp_*.csv
+*.csv
+!config.example.csv  # Keep example configs
+*.patch
+
+# Java artifacts
+*.class
+*.jar
+!java-extractor/lib/*.jar  # Keep required dependencies
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary extraction outputs
+delayDuration_*.csv
+all_stats_*.csv

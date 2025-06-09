@@ -25,6 +25,11 @@ func NewWriter(dataPath string) (*Writer, error) {
 
 	opts := tsdb.DefaultOptions()
 	opts.RetentionDuration = int64(365 * 24 * time.Hour / time.Millisecond) // 1 year
+	// Allow samples from up to 30 days in the past (for historical data import)
+	opts.MinBlockDuration = int64(2 * time.Hour / time.Millisecond) // 2 hours minimum block
+	opts.MaxBlockDuration = int64(24 * time.Hour / time.Millisecond) // 24 hours max block
+	// Set out-of-order time window to allow historical data
+	opts.OutOfOrderTimeWindow = int64(30 * 24 * time.Hour / time.Millisecond) // 30 days
 
 	db, err := tsdb.Open(absPath, nil, nil, opts, nil)
 	if err != nil {

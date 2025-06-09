@@ -19,6 +19,7 @@ const (
 	StatTypeInt StatType = iota
 	StatTypeLong
 	StatTypeDouble
+	StatTypeFloat
 )
 
 type ResourceType struct {
@@ -35,6 +36,7 @@ type StatDescriptor struct {
 	Type        StatType
 	Unit        string
 	IsCounter   bool
+	LargestBit  byte
 }
 
 type ResourceInstance struct {
